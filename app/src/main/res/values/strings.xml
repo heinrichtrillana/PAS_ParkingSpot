@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">My Parking Spot</string>
+    <string name="map">Mapa</string>
+    <string name="history">Historial</string>
+    <string name="profile">Perfil</string>
+</resources>
