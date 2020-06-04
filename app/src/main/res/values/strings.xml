@@ -3,4 +3,5 @@
     <string name="map">Mapa</string>
     <string name="history">Historial</string>
     <string name="profile">Perfil</string>
+    <string name="profile_edit">Editar perfil</string>
 </resources>
