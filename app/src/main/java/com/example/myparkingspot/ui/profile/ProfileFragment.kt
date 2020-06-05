@@ -14,29 +14,29 @@ import com.example.myparkingspot.databinding.FragmentProfileBinding
 class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.actionBar?.setDisplayHomeAsUpEnabled(true);
-    }
+    private lateinit var binding : FragmentProfileBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
-        val binding: FragmentProfileBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_profile, container, false)
 
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        return binding.root
+    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        profileViewModel = activity?.run {
+            ViewModelProviders.of(this).get(ProfileViewModel::class.java);
+        }?: throw Exception("Invalid Activity")
+
         binding.profileViewModel = profileViewModel;
 
         //Al clickar en editar perfil, navego al fragmento correspondiente.
         binding.editProfileButton.setOnClickListener{
             this.findNavController().navigate(R.id.profile_to_edit_profile);
         }
-
-        return binding.root
     }
 }
