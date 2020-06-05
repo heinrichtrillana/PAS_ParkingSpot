@@ -40,12 +40,12 @@ class ProfileFragment : Fragment() {
         //Rellenar el view model con los datos del Shared Preferences.
         profileViewModel.setName(sharedPref.getString(getString(R.string.label_name),"")!!)
         profileViewModel.setSurname(sharedPref.getString(getString(R.string.label_family_name),"")!!)
-        profileViewModel.setId(sharedPref.getString(getString(R.string.label_id),"5")!!)
-        profileViewModel.setPhone(sharedPref.getString(getString(R.string.label_phone),"4")!!)
+        profileViewModel.setId(sharedPref.getString(getString(R.string.label_id),"")!!)
+        profileViewModel.setPhone(sharedPref.getString(getString(R.string.label_phone),"")!!)
 
-        profileViewModel.setManufacturer(sharedPref.getString(getString(R.string.label_manufacturer),"3")!!)
-        profileViewModel.setModel(sharedPref.getString(getString(R.string.label_model),"2")!!)
-        profileViewModel.setPlate(sharedPref.getString(getString(R.string.label_plate),"1")!!)
+        profileViewModel.setManufacturer(sharedPref.getString(getString(R.string.label_manufacturer),"")!!)
+        profileViewModel.setModel(sharedPref.getString(getString(R.string.label_model),"")!!)
+        profileViewModel.setPlate(sharedPref.getString(getString(R.string.label_plate),"")!!)
 
         //Al clickar en editar perfil, navego al fragmento correspondiente.
         binding.editProfileButton.setOnClickListener{
