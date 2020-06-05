@@ -9,7 +9,7 @@
         android:id="@+id/navigation_map"
         android:name="com.example.myparkingspot.ui.map.MapFragment"
         android:label="@string/map"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/navigation_history"
