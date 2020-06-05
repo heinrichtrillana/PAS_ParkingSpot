@@ -4,16 +4,17 @@
     <string name="history">Historial</string>
     <string name="profile">Perfil</string>
     <string name="profile_edit">Editar perfil</string>
-    <string name="user_information">Informacion de usuario</string>
+    <string name="user_information">Información de usuario</string>
     <string name="label_name">Nombre</string>
     <string name="label_family_name">Apellidos</string>
     <string name="label_id">DNI</string>
-    <string name="label_birthdate">Fecha de nacimiento</string>
-    <string name="label_phone">Telefono</string>
-    <string name="car_information">Informacion del coche</string>
+    <string name="label_phone">Teléfono</string>
+    <string name="car_information">Información del coche</string>
     <string name="label_manufacturer">Marca</string>
     <string name="label_model">Modelo</string>
-    <string name="label_plate">Matricula</string>
-    <string name="label_registration_date">Fecha matriculacion</string>
+    <string name="label_plate">Matrícula</string>
     <string name="action_edit_profile">EDITAR PERFIL</string>
+    <string name="user_preference_file">User Shared Preferences</string>
+    <string name="action_save_profile">Guardar perfil</string>
+    <string name="snack_profile_saved">Perfil guardado correctamente</string>
 </resources>

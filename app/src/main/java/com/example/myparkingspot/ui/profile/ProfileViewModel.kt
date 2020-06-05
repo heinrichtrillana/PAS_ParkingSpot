@@ -11,16 +11,55 @@ class ProfileViewModel : ViewModel() {
     val name: LiveData<String>
         get() = _name
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-
-
     fun setName( name : String){
-        Log.i("probando2", name);
         _name.value = name
-        Log.i("probando3", _name.value);
     }
-    val text: LiveData<String> = _text
 
+    private val _surname = MutableLiveData<String>()
+    val surname: LiveData<String>
+        get() = _surname
+
+    fun setSurname( surname : String){
+        _surname.value = surname
+    }
+
+    private val _id = MutableLiveData<String>()
+    val id: LiveData<String>
+        get() = _id
+
+    fun setId( id : String){
+        _id.value = id
+    }
+
+    private val _phone = MutableLiveData<String>()
+    val phone: LiveData<String>
+        get() = _phone
+
+    fun setPhone( phone : String){
+        _phone.value = phone
+    }
+
+    private val _manufacturer = MutableLiveData<String>()
+    val manufacturer: LiveData<String>
+        get() = _manufacturer
+
+    fun setManufacturer( manufacturer : String){
+        _manufacturer.value = manufacturer
+    }
+
+    private val _model = MutableLiveData<String>()
+    val model: LiveData<String>
+        get() = _model
+
+    fun setModel( model : String){
+        _model.value = model
+    }
+
+    private val _plate = MutableLiveData<String>()
+    val plate: LiveData<String>
+        get() = _plate
+
+    fun setPlate( plate : String){
+        _plate.value = plate
+    }
 }

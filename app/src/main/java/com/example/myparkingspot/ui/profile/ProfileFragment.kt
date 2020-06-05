@@ -1,5 +1,6 @@
 package com.example.myparkingspot.ui.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,19 @@ class ProfileFragment : Fragment() {
             ViewModelProviders.of(this).get(ProfileViewModel::class.java);
         }?: throw Exception("Invalid Activity")
 
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.user_preference_file), Context.MODE_PRIVATE) ?: return
+
         binding.profileViewModel = profileViewModel;
+        //Rellenar el view model con los datos del Shared Preferences.
+        profileViewModel.setName(sharedPref.getString(getString(R.string.label_name),"")!!)
+        profileViewModel.setSurname(sharedPref.getString(getString(R.string.label_family_name),"")!!)
+        profileViewModel.setId(sharedPref.getString(getString(R.string.label_id),"5")!!)
+        profileViewModel.setPhone(sharedPref.getString(getString(R.string.label_phone),"4")!!)
+
+        profileViewModel.setManufacturer(sharedPref.getString(getString(R.string.label_manufacturer),"3")!!)
+        profileViewModel.setModel(sharedPref.getString(getString(R.string.label_model),"2")!!)
+        profileViewModel.setPlate(sharedPref.getString(getString(R.string.label_plate),"1")!!)
 
         //Al clickar en editar perfil, navego al fragmento correspondiente.
         binding.editProfileButton.setOnClickListener{
