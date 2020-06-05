@@ -1,5 +1,6 @@
 package com.example.myparkingspot.ui.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,14 +43,36 @@ class ProfileEditFragment : Fragment(){
 
         binding.profileViewModel = profileViewModel;
 
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.user_preference_file), Context.MODE_PRIVATE) ?: return
+
         binding.saveProfile.setOnClickListener{
 
-            Log.i("probando", binding.probandoxd.text.toString())
-            profileViewModel.setName(binding.probandoxd.text.toString())
-            Log.i("probando", profileViewModel.name.value )
+            // Guardar los datos tanto en el view model como en el shared preferences.
+            profileViewModel.setName(binding.nameInput.text.toString())
+            profileViewModel.setSurname(binding.surnameInput.text.toString())
+            profileViewModel.setId(binding.idInput.text.toString())
+            profileViewModel.setPhone(binding.phoneInput.text.toString())
+
+            profileViewModel.setManufacturer(binding.manufacturerInput.text.toString())
+            profileViewModel.setModel(binding.modelInput.text.toString())
+            profileViewModel.setPlate(binding.plateInput.text.toString())
+
+            with (sharedPref.edit()) {
+                putString(getString(R.string.label_name), profileViewModel.name.value)
+                putString(getString(R.string.label_family_name), profileViewModel.surname.value)
+                putString(getString(R.string.label_id), profileViewModel.id.value)
+                putString(getString(R.string.label_phone), profileViewModel.phone.value)
+
+                putString(getString(R.string.label_manufacturer), profileViewModel.manufacturer.value)
+                putString(getString(R.string.label_model), profileViewModel.model.value)
+                putString(getString(R.string.label_plate), profileViewModel.plate.value)
+
+                commit()
+            }
 
             this.findNavController().navigate(R.id.edit_profile_to_profile);
-            Snackbar.make(it, "SAVED", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(it, getString(R.string.snack_profile_saved), Snackbar.LENGTH_SHORT).show();
         }
     }
 }
