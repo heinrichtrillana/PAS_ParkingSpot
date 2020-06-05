@@ -17,4 +17,5 @@
     <string name="user_preference_file">User Shared Preferences</string>
     <string name="action_save_profile">Guardar perfil</string>
     <string name="snack_profile_saved">Perfil guardado correctamente</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
