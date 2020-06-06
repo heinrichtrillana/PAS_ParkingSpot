@@ -18,4 +18,7 @@
     <string name="action_save_profile">Guardar perfil</string>
     <string name="snack_profile_saved">Perfil guardado correctamente</string>
     <string name="title_activity_maps">Map</string>
+    <string name="location_preference_file">Location Preference File</string>
+    <string name="latitude_key">LATITUDE</string>
+    <string name="longitude_key">LONGITUDE</string>
 </resources>
