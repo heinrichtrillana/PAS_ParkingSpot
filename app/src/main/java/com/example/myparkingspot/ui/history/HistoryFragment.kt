@@ -26,7 +26,7 @@ class HistoryFragment : Fragment() {
 
         val query: Query = FirebaseFirestore.getInstance()
             .collection("locations")
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(50)
 
         val options = FirestoreRecyclerOptions.Builder<Location>()

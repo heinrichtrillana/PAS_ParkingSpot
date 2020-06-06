@@ -10,6 +10,7 @@ import com.example.myparkingspot.R
 import com.example.myparkingspot.ui.Location
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationAdapter( options : FirestoreRecyclerOptions<Location>):
@@ -25,7 +26,9 @@ class LocationAdapter( options : FirestoreRecyclerOptions<Location>):
             coordinates.text = "(" + item.latitude.toString() + ", " + item.longitude.toString() + ")"
 
             val date = view.findViewById<TextView>(R.id.date)
-            date.text = item.timestamp?.toDate().toString()
+
+            val format = SimpleDateFormat( "dd/MM/yyyy HH:mm")
+            date.text = format.format(item.timestamp?.toDate())
         }
     }
 
