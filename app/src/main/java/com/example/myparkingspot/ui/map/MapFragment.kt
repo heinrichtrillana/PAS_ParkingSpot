@@ -109,14 +109,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             lastLocation.isVisible = false;
             showLastLocation = false;
         } else {
-            binding.lastLocation.setImageResource(R.drawable.ic_location_off_black_24dp)
-
             //Sacar los valores del shared preferences
-            var lat = getDouble(sharedPref,getString(R.string.latitude_key), Double.MIN_VALUE);
-            var long = getDouble(sharedPref,getString(R.string.longitude_key), Double.MIN_VALUE);
+            if( sharedPref.contains(getString(R.string.latitude_key))
+                && sharedPref.contains(getString(R.string.longitude_key))){ //Si existe la posicion anterior, la muestro
 
-            if( lat > Double.MIN_VALUE && long > Double.MIN_VALUE){ //Si existe la posicion anterior, la muestro
-                var latLng = LatLng(lat,long)
+                binding.lastLocation.setImageResource(R.drawable.ic_location_off_black_24dp)
+                var lat = sharedPref.getString(getString(R.string.latitude_key), "");
+                var long = sharedPref.getString(getString(R.string.longitude_key), "");
+
+                var latLng = LatLng(lat!!.toDouble(),long!!.toDouble())
 
                 //añadir pin
                 lastLocation = googleMap.addMarker(MarkerOptions().position(latLng))
@@ -143,11 +144,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         //Cuando todo esta bien, se obitene la localizacion y se guarda.
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
+            .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
                 Log.i("Location", location.toString())
-                Snackbar.make(mapView, "GUARDAR X,Y", Snackbar.LENGTH_SHORT).show();
 
+                with(sharedPref.edit()) {
+                    putString(getString(R.string.latitude_key),location!!.latitude.toString())
+                    putString(getString(R.string.longitude_key),location!!.longitude.toString())
+                    commit()
+                }
+
+                lastLocation.isVisible = false //Si habia un marcador, al añadir uno nuevo escondemos el anterior.
+                Snackbar.make(mapView, "Posicion añadida correctamente", Snackbar.LENGTH_SHORT).show();
             }
     }
 
@@ -171,16 +179,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
-    }
-
-
-    //Store Double on sharedpreferences
-
-    fun putDouble(edit: SharedPreferences.Editor, key: String?, value: Double): SharedPreferences.Editor? {
-        return edit.putLong(key, java.lang.Double.doubleToRawLongBits(value))
-    }
-
-    fun getDouble(prefs: SharedPreferences, key: String?, defaultValue: Double): Double {
-        return java.lang.Double.longBitsToDouble(prefs.getLong(key,java.lang.Double.doubleToLongBits(defaultValue)))
     }
 }
