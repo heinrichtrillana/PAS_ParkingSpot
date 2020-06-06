@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -40,6 +44,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var lastLocation : Marker
     private lateinit var sharedPref : SharedPreferences
+
+    private var db = FirebaseFirestore.getInstance();
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -159,13 +165,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 val geocoder : Geocoder = Geocoder(this.context, Locale.getDefault());
 
                 addresses = geocoder.getFromLocation( location!!.latitude, location!!.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                addresses[0].getAddressLine(0);
+
+                val position = HashMap<String, Any>()
+
+                position["latitude"] = location!!.latitude
+                position["longitude"] = location!!.longitude
+                position["timestamp"] = FieldValue.serverTimestamp()
+                position["address"] = addresses[0].getAddressLine(0)
+
+                db.collection("locations")
+                    .add(position)
+                    .addOnSuccessListener {
+                        Log.i("MAP", "Saved on Firestore successfully")
+                        Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT).show(); }
+                    .addOnFailureListener { e ->
+                        Log.w("MAP", "Error adding document to Firestore", e)
+                    }
+
 
                 lastLocation.isVisible = false //Si habia un marcador, al añadir uno nuevo escondemos el anterior.
                 binding.lastLocation.setImageResource(R.drawable.ic_location_black_24dp)
-
-                //Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT).show();
-                Snackbar.make(mapView, addresses[0].getAddressLine(0), Snackbar.LENGTH_SHORT).show();
             }
     }
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "166752914816",
+    "firebase_url": "https://my-parking-spot-6b6a4.firebaseio.com",
+    "project_id": "my-parking-spot-6b6a4",
+    "storage_bucket": "my-parking-spot-6b6a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166752914816:android:2361a92e0c978b52a5c565",
+        "android_client_info": {
+          "package_name": "com.example.myparkingspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166752914816-cae3fq6pn20579otglbiebgrjj5g7dbk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myparkingspot",
+            "certificate_hash": "62126c71f5ca4804aa32dbe405e9fd588899ceec"
+          }
+        },
+        {
+          "client_id": "166752914816-1re4ld413gt862c3lhq8dr9f5q6sqjqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxTIq9BftGxW8IF9Dq_yn6HHcGxnRoh00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166752914816-1re4ld413gt862c3lhq8dr9f5q6sqjqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
