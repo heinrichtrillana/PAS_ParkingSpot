@@ -19,11 +19,11 @@ import com.example.myparkingspot.databinding.FragmentMapBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
-
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_map.*
 
@@ -35,7 +35,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding : FragmentMapBinding
 
-    private var showLocation : Boolean = false;
+    private var showLastLocation : Boolean = false;
+    private lateinit var lastLocation : Marker
+    private lateinit var sharedPref : SharedPreferences
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -98,14 +100,34 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun onSeeLocationClicked(){
-        Snackbar.make(mapView, getString(R.string.snack_profile_saved), Snackbar.LENGTH_SHORT).show();
+        //lastLocation = googleMap.addMarker(MarkerOptions().position(LatLng(lat,long)))
+        //lastLocation.isVisible = false
 
-        if(showLocation){ //Si estaba seleccionada la deselecciono
+        if(showLastLocation){ //Si estaba seleccionada la deselecciono
             binding.lastLocation.setImageResource(R.drawable.ic_location_black_24dp)
-            showLocation = false
+            //Esconder pin
+            lastLocation.isVisible = false;
+            showLastLocation = false;
         } else {
             binding.lastLocation.setImageResource(R.drawable.ic_location_off_black_24dp)
-            showLocation = true
+
+            //Sacar los valores del shared preferences
+            var lat = getDouble(sharedPref,getString(R.string.latitude_key), Double.MIN_VALUE);
+            var long = getDouble(sharedPref,getString(R.string.longitude_key), Double.MIN_VALUE);
+
+            if( lat > Double.MIN_VALUE && long > Double.MIN_VALUE){ //Si existe la posicion anterior, la muestro
+                var latLng = LatLng(lat,long)
+
+                //añadir pin
+                lastLocation = googleMap.addMarker(MarkerOptions().position(latLng))
+                lastLocation.isVisible = true;
+                showLastLocation = true;
+                //Mover hacia el pin
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18F));
+            } else { //Si no , alerto
+                Snackbar.make(mapView, "No hay posicion anterior", Snackbar.LENGTH_SHORT).show();
+            }
+
         }
 
     }
