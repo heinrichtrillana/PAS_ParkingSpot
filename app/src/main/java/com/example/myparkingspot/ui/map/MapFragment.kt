@@ -1,6 +1,7 @@
 package com.example.myparkingspot.ui.map
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -10,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -46,7 +46,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
+        sharedPref = activity?.getSharedPreferences(
+            getString(R.string.location_preference_file), Context.MODE_PRIVATE) ?: return
     }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -148,4 +151,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
+
+    //Store Double on sharedpreferences
+
+    fun putDouble(edit: SharedPreferences.Editor, key: String?, value: Double): SharedPreferences.Editor? {
+        return edit.putLong(key, java.lang.Double.doubleToRawLongBits(value))
+    }
+
+    fun getDouble(prefs: SharedPreferences, key: String?, defaultValue: Double): Double {
+        return java.lang.Double.longBitsToDouble(prefs.getLong(key,java.lang.Double.doubleToLongBits(defaultValue)))
+    }
 }
