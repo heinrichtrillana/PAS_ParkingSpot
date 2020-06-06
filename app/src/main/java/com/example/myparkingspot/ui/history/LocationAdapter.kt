@@ -25,7 +25,7 @@ class LocationAdapter( options : FirestoreRecyclerOptions<Location>):
             coordinates.text = "(" + item.latitude.toString() + ", " + item.longitude.toString() + ")"
 
             val date = view.findViewById<TextView>(R.id.date)
-            date.text = item.timestamp?.let { Date(it).toString() }
+            date.text = item.timestamp?.toDate().toString()
         }
     }
 
