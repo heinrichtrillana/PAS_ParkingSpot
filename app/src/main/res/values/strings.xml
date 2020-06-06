@@ -17,4 +17,11 @@
     <string name="user_preference_file">User Shared Preferences</string>
     <string name="action_save_profile">Guardar perfil</string>
     <string name="snack_profile_saved">Perfil guardado correctamente</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="location_preference_file">Location Preference File</string>
+    <string name="latitude_key">LATITUDE</string>
+    <string name="longitude_key">LONGITUDE</string>
+    <string name="location_added_success">Posicion añadida correctamente</string>
+    <string name="location_view_last_error">No hay posiciones guardadas</string>
+    <string name="add_location_location_error">Activa la ubicación</string>
 </resources>
