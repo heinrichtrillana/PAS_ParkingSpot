@@ -6,10 +6,10 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -35,7 +35,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding : FragmentMapBinding
 
-    private var showLastLocation : Boolean = false;
     private lateinit var lastLocation : Marker
     private lateinit var sharedPref : SharedPreferences
 
@@ -81,7 +80,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // Si nos da permiso, habilitamos la capa y centramos en su ubicacion
                     googleMap.isMyLocationEnabled = true
-                    Log.i("Location", "Init")
+
+                    lastLocation = googleMap.addMarker(MarkerOptions().position(LatLng(0.0,0.0)))
+                    lastLocation.isVisible = false
 
                     //Mover la camara a mi ubicacion
                     fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
@@ -103,11 +104,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         //lastLocation = googleMap.addMarker(MarkerOptions().position(LatLng(lat,long)))
         //lastLocation.isVisible = false
 
-        if(showLastLocation){ //Si estaba seleccionada la deselecciono
+        if(lastLocation.isVisible){ //Si estaba seleccionada la deselecciono
             binding.lastLocation.setImageResource(R.drawable.ic_location_black_24dp)
             //Esconder pin
             lastLocation.isVisible = false;
-            showLastLocation = false;
         } else {
             //Sacar los valores del shared preferences
             if( sharedPref.contains(getString(R.string.latitude_key))
@@ -122,11 +122,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //añadir pin
                 lastLocation = googleMap.addMarker(MarkerOptions().position(latLng))
                 lastLocation.isVisible = true;
-                showLastLocation = true;
                 //Mover hacia el pin
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18F));
             } else { //Si no , alerto
-                Snackbar.make(mapView, "No hay posicion anterior", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(mapView, getString(R.string.location_view_last_error), Snackbar.LENGTH_SHORT).show();
             }
 
         }
@@ -139,14 +138,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             return;
         }
         if(!isLocationEnabled()){ //Si no tiene la ubicacion activada, pide que se active
-            Snackbar.make(mapView, "TURN LOCATION ON", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mapView, getString(R.string.add_location_location_error), Snackbar.LENGTH_SHORT).show();
             return;
         }
         //Cuando todo esta bien, se obitene la localizacion y se guarda.
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
-                Log.i("Location", location.toString())
 
                 with(sharedPref.edit()) {
                     putString(getString(R.string.latitude_key),location!!.latitude.toString())
@@ -155,7 +153,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 lastLocation.isVisible = false //Si habia un marcador, al añadir uno nuevo escondemos el anterior.
-                Snackbar.make(mapView, "Posicion añadida correctamente", Snackbar.LENGTH_SHORT).show();
+                binding.lastLocation.setImageResource(R.drawable.ic_location_black_24dp)
+
+                Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT).show();
             }
     }
 

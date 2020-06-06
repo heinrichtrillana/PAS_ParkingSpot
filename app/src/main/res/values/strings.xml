@@ -21,4 +21,7 @@
     <string name="location_preference_file">Location Preference File</string>
     <string name="latitude_key">LATITUDE</string>
     <string name="longitude_key">LONGITUDE</string>
+    <string name="location_added_success">Posicion añadida correctamente</string>
+    <string name="location_view_last_error">No hay posiciones guardadas</string>
+    <string name="add_location_location_error">Activa la ubicación</string>
 </resources>
