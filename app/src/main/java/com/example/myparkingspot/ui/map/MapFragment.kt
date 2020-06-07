@@ -134,7 +134,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //Mover hacia el pin
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18F));
             } else { //Si no , alerto
-                Snackbar.make(mapView, getString(R.string.location_view_last_error), Snackbar.LENGTH_SHORT).show();
+                var snackbar = Snackbar.make(mapView, getString(R.string.location_view_last_error), Snackbar.LENGTH_SHORT)
+                snackbar.setAnchorView(R.id.nav_view)
+                snackbar.show()
+
             }
 
         }
@@ -147,7 +150,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             return;
         }
         if(!isLocationEnabled()){ //Si no tiene la ubicacion activada, pide que se active
-            Snackbar.make(mapView, getString(R.string.add_location_location_error), Snackbar.LENGTH_SHORT).show();
+            var snackbar = Snackbar.make(mapView, getString(R.string.add_location_location_error), Snackbar.LENGTH_SHORT)
+            snackbar.setAnchorView(R.id.nav_view)
+            snackbar.show()
             return;
         }
         //Cuando todo esta bien, se obitene la localizacion y se guarda.
@@ -177,7 +182,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     .add(position)
                     .addOnSuccessListener {
                         Log.i("MAP", "Saved on Firestore successfully")
-                        Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT).show(); }
+                        var snackbar = Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT)
+                        snackbar.setAnchorView(R.id.nav_view)
+                        snackbar.show()
+                    }
                     .addOnFailureListener { e ->
                         Log.w("MAP", "Error adding document to Firestore", e)
                     }

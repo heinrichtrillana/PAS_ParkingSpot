@@ -72,7 +72,9 @@ class ProfileEditFragment : Fragment(){
             }
 
             this.findNavController().navigate(R.id.edit_profile_to_profile);
-            Snackbar.make(it, getString(R.string.snack_profile_saved), Snackbar.LENGTH_SHORT).show();
+            var snackbar = Snackbar.make(it, getString(R.string.snack_profile_saved), Snackbar.LENGTH_SHORT);
+            snackbar.setAnchorView(R.id.nav_view)
+            snackbar.show()
         }
     }
 }
