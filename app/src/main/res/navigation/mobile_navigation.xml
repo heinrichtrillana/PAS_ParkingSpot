@@ -15,7 +15,7 @@
         android:id="@+id/navigation_history"
         android:name="com.example.myparkingspot.ui.history.HistoryFragment"
         android:label="@string/history"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/navigation_profile"

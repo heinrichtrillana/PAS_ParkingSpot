@@ -3,9 +3,12 @@ package com.example.myparkingspot.ui.map
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +28,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_map.*
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -37,6 +44,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var lastLocation : Marker
     private lateinit var sharedPref : SharedPreferences
+
+    private var db = FirebaseFirestore.getInstance();
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -125,7 +134,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //Mover hacia el pin
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18F));
             } else { //Si no , alerto
-                Snackbar.make(mapView, getString(R.string.location_view_last_error), Snackbar.LENGTH_SHORT).show();
+                var snackbar = Snackbar.make(mapView, getString(R.string.location_view_last_error), Snackbar.LENGTH_SHORT)
+                snackbar.setAnchorView(R.id.nav_view)
+                snackbar.show()
+
             }
 
         }
@@ -138,7 +150,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             return;
         }
         if(!isLocationEnabled()){ //Si no tiene la ubicacion activada, pide que se active
-            Snackbar.make(mapView, getString(R.string.add_location_location_error), Snackbar.LENGTH_SHORT).show();
+            var snackbar = Snackbar.make(mapView, getString(R.string.add_location_location_error), Snackbar.LENGTH_SHORT)
+            snackbar.setAnchorView(R.id.nav_view)
+            snackbar.show()
             return;
         }
         //Cuando todo esta bien, se obitene la localizacion y se guarda.
@@ -152,10 +166,33 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     commit()
                 }
 
+                val addresses : List<Address>
+                val geocoder : Geocoder = Geocoder(this.context, Locale.getDefault());
+
+                addresses = geocoder.getFromLocation( location!!.latitude, location!!.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                val position = HashMap<String, Any>()
+
+                position["latitude"] = location!!.latitude
+                position["longitude"] = location!!.longitude
+                position["timestamp"] = FieldValue.serverTimestamp()
+                position["address"] = addresses[0].getAddressLine(0)
+
+                db.collection("locations")
+                    .add(position)
+                    .addOnSuccessListener {
+                        Log.i("MAP", "Saved on Firestore successfully")
+                        var snackbar = Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT)
+                        snackbar.setAnchorView(R.id.nav_view)
+                        snackbar.show()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("MAP", "Error adding document to Firestore", e)
+                    }
+
+
                 lastLocation.isVisible = false //Si habia un marcador, al añadir uno nuevo escondemos el anterior.
                 binding.lastLocation.setImageResource(R.drawable.ic_location_black_24dp)
-
-                Snackbar.make(mapView, getString(R.string.location_added_success), Snackbar.LENGTH_SHORT).show();
             }
     }
 
